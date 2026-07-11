@@ -14,7 +14,7 @@
 #define MAXLINE 80
 
 #define UNINITIALISED -1
-// *** create a way to determine the length of episodes rather than assuming ***
+// *** create a way to determine the len of episodes rather than assuming ***
 #define EPISODE_NUMBER_LEN 3
 // the number of digits in intmax
 #define TOT_INT_DIGITS 10
