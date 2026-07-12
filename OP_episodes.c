@@ -1,4 +1,4 @@
-/**  A program to monitor how many episodes of one piece you are watching 
+/** A program to monitor how many episodes of one piece you are watching 
  * Written and implemented by Thomas Blanch
  * Usage: 
  * Compile with gcc -Wall -g -o OP OP_episodes.c
@@ -16,7 +16,7 @@
 #define UNINITIALISED -1
 // *** create a way to determine the len of episodes rather than assuming ***
 #define EPISODE_NUMBER_LEN 3
-// the number of digits in intmax
+// the number of digits in int_max
 #define TOT_INT_DIGITS 10
 
 #define ASCII_NEWLINE 10
@@ -122,7 +122,7 @@ int_to_string(int x, char* number) {
     }
     number[TOT_INT_DIGITS] = '\0';
 
-    // Remove redundant chars
+    // Remove redundant zeros
     int redundants = 0;
     while (number[redundants] == ASCII_0) {
         redundants++;
