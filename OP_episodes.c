@@ -16,13 +16,18 @@
 #define UNINITIALISED -1
 // *** create a way to determine the len of episodes rather than assuming ***
 #define EPISODE_NUMBER_LEN 3
-// the number of digits in int_max
+// the number of numerical digits in int_max
 #define TOT_INT_DIGITS 10
 
 #define ASCII_NEWLINE 10
 #define ASCII_0 48
+#define ASCII_9 57
+#define ASCII_DOT 46
 
+// Prototypes
 int readline(FILE* fp, char* line, int* len);
+int prev_episode(char* line, int line_len);
+int last_watching_day(char* line);
 char* int_to_string(int x, char* number);
 
 int
@@ -33,7 +38,7 @@ main (int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
 
-    // ** ask the user if they are yet to create a file **
+    // ** ask the user if they are yet to create a file and create the template **
     // ** have a non-one piece mode and just any tv show? **
 
     // Determine how many days with no episodes
@@ -63,19 +68,14 @@ main (int argc, char** argv) {
     while (!readline(fp, line, &line_len)) {
         continue;
     }
+    fclose(fp);
 
     // Add the info from today to the file
-    fclose(fp);
     FILE* fp2 = fopen(argv[1], "a");
 
-    // Work out the last episode on last watching day
-    char prev_day_str[EPISODE_NUMBER_LEN + 1];
-    for (int i = 0; i < EPISODE_NUMBER_LEN; i++) {
-        prev_day_str[i] = line[line_len - EPISODE_NUMBER_LEN - 1 + i];
-    }
-    prev_day_str[EPISODE_NUMBER_LEN] = '\0';
-    int prev_episode = atoi(prev_day_str);
-    int prev_day = (int) line[0] - ASCII_0;
+    // Work out the last episode watched on the most recent watching day
+    int prev_epi_num = prev_episode(line, line_len);
+    int prev_day = last_watching_day(line);
 
     // Add only the day number for the skipped days
     fprintf(fp2, "\n");
@@ -87,10 +87,10 @@ main (int argc, char** argv) {
 
     // Increment and add the episodes watched on the given day
     fprintf(fp2, "%s", int_to_string(prev_day + skipped + 1, number));
-    fprintf(fp2, ". ");
-    for (int ep = prev_episode + 1; ep <= episode; ep++) {
-        fprintf(fp2, "%s", int_to_string(ep, number));
+    fprintf(fp2, ".");
+    for (int ep = prev_epi_num + 1; ep <= episode; ep++) {
         fprintf(fp2, " ");
+        fprintf(fp2, "%s", int_to_string(ep, number));
     }
 
     fclose(fp);
@@ -109,6 +109,36 @@ readline(FILE* fp, char* line, int* len) {
     line[(*len)++] = '\0';
 
     return ch == EOF;
+}
+
+// Returns the last episode watched on the most recent watching day
+int
+prev_episode(char* line, int line_len) {
+    char prev_epi_str[EPISODE_NUMBER_LEN + 1];
+    for (int i = 0; i < EPISODE_NUMBER_LEN; i++) {
+        prev_epi_str[i] = line[line_len - EPISODE_NUMBER_LEN - 1 + i];
+    }
+    prev_epi_str[EPISODE_NUMBER_LEN] = '\0';
+    return atoi(prev_epi_str);
+}
+
+// Returns the date (as an integer) of the last watching day according to the 
+// diary
+int 
+last_watching_day(char* line) {
+    int num_digits = 0;
+    while (line[num_digits] != ASCII_DOT) {
+        if (line[num_digits] < ASCII_0 || line[num_digits] > ASCII_9) {
+            printf("Error in day format, must be integers\n");
+            exit(EXIT_FAILURE);
+        }
+        num_digits++;
+    }
+    int prev_day = 0;
+    for (int i = num_digits; i > 0; i--) {
+        prev_day += pow(10, i - 1) * (line[num_digits - i] - ASCII_0); 
+    }
+    return prev_day;
 }
 
 // Convert an integer to a string
