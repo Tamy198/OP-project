@@ -145,10 +145,10 @@ last_watching_day(char* line) {
 char*
 int_to_string(int x, char* number) {
     // Convert each demical place to a char and add it to the string 
-    for (int i = TOT_INT_DIGITS - 1; i >= 0; i--) {
-        number[TOT_INT_DIGITS - 1 - i] = 
-            (char) (x / ((int)pow(10, i)) + ASCII_0);
-        x %= (int) pow(10, i);
+    for (int digit = TOT_INT_DIGITS - 1; digit >= 0; digit--) {
+        number[TOT_INT_DIGITS - 1 - digit] = 
+            (char) (x / ((int)pow(10, digit)) + ASCII_0);
+        x %= (int) pow(10, digit);
     }
     number[TOT_INT_DIGITS] = '\0';
 
