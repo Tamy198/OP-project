@@ -1,6 +1,6 @@
 OP episode watched:
 Try to limit to 4 (7 using one pace) a day
-One pace is ~2x the pace of normal episodes thus divide by 2 to get equivalent time (and then add 1 to balance)
+One pace is ~2x the pace of normal thus divide by 2 to get equivalent time (add 1 to balance)
 9/07/26 (0.)
 0. 494
 1. 495
