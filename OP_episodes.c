@@ -10,8 +10,9 @@
 #include <stdlib.h>
 #include <math.h>
 
-// 18 episodes with 3 digits
-#define MAXLINE 80
+// 40 episodes with 3 digits
+// ** need to fix this line cap problem **
+#define MAXLINE 168
 
 #define UNINITIALISED -1
 // *** create a way to determine the len of episodes rather than assuming ***
